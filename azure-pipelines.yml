@@ -1,0 +1,40 @@
+trigger:
+- master
+ 
+pool:
+  vmImage: 'windows-latest'
+ 
+steps:
+- checkout: self
+ 
+- task: PowerShell@2
+  displayName: 'Identify Project Files'
+  inputs:
+    targetType: 'inline'
+    script: |
+ 
+      Write-Host "================================"
+      Write-Host "Repository Location"
+      Write-Host "$(Build.SourcesDirectory)"
+      Write-Host "================================"
+ 
+      Write-Host "All Files:"
+      Get-ChildItem "$(Build.SourcesDirectory)" -Recurse -File |
+      ForEach-Object {
+          Write-Host $_.FullName
+      }
+ 
+      Write-Host "================================"
+      Write-Host "Solution Files (.sln)"
+      Get-ChildItem "$(Build.SourcesDirectory)" -Filter "*.sln" -Recurse |
+      ForEach-Object {
+          Write-Host $_.FullName
+      }
+ 
+      Write-Host "================================"
+      Write-Host "Project Files (.csproj)"
+      Get-ChildItem "$(Build.SourcesDirectory)" -Filter "*.csproj" -Recurse |
+      ForEach-Object {
+          Write-Host $_.FullName
+      }
+ 
